@@ -23,8 +23,9 @@ Octree* Octree::getX1Y1Z1() { return x1y1z1; }
 	or false if it wasn't able to do so.
 */
 bool Octree::insert(Node node) {
-	// Node is outside of the boundary
-	if (!this->boundary.contains(node)) { return false; }
+	// Node is outside of the boundary, unable to insert
+	if (!this->boundary.contains(node.getCoordinate())) { return false; }
+
 	// If octree is available, add the node in the list of nodes of this octree
 	// If not, subdivide it, try to insert it again and reset the nodes of the octree
 	if (this->nodes.size() < this->capacity && !this->isDivided) {
@@ -53,21 +54,60 @@ bool Octree::insert(Node node) {
 	this method subdivide the octree into its 8 sub-octrees
 */
 void Octree::subdivide() {
-	Cube cubeX0Y0Z0 = Cube();
-	Cube cubeX0Y0Z1 = Cube();
-	Cube cubeX0Y1Z0 = Cube();
-	Cube cubeX0Y1Z1 = Cube();
-	Cube cubeX1Y0Z0 = Cube();
-	Cube cubeX1Y0Z1 = Cube();
-	Cube cubeX1Y1Z0 = Cube();
-	Cube cubeX1Y1Z1 = Cube();
+    float newSize = this->boundary.getSideSize() / 2.0f;
 
-	x0y0z0 = new Octree(cubeX0Y0Z0, this->capacity);
-	x0y0z1 = new Octree(cubeX0Y0Z1, this->capacity);
-	x0y1z0 = new Octree(cubeX0Y1Z0, this->capacity);
-	x0y1z1 = new Octree(cubeX0Y1Z1, this->capacity);
-	x1y0z0 = new Octree(cubeX1Y0Z0, this->capacity);
-	x1y0z1 = new Octree(cubeX1Y0Z1, this->capacity);
-	x1y1z0 = new Octree(cubeX1Y1Z0, this->capacity);
-	x1y1z1 = new Octree(cubeX1Y1Z1, this->capacity);
+    Coordinate center = this->boundary.getCenter();
+
+    float offset = newSize / 2.0f;
+
+    Coordinate centerX0Y0Z0(center.getX() - offset, center.getY() - offset, center.getZ() - offset);
+    Coordinate centerX0Y0Z1(center.getX() - offset, center.getY() - offset, center.getZ() + offset);
+    Coordinate centerX0Y1Z0(center.getX() - offset, center.getY() + offset, center.getZ() - offset);
+    Coordinate centerX0Y1Z1(center.getX() - offset, center.getY() + offset, center.getZ() + offset);
+    Coordinate centerX1Y0Z0(center.getX() + offset, center.getY() - offset, center.getZ() - offset);
+    Coordinate centerX1Y0Z1(center.getX() + offset, center.getY() - offset, center.getZ() + offset);
+    Coordinate centerX1Y1Z0(center.getX() + offset, center.getY() + offset, center.getZ() - offset);
+    Coordinate centerX1Y1Z1(center.getX() + offset, center.getY() + offset, center.getZ() + offset);
+
+    Cube cubeX0Y0Z0(centerX0Y0Z0, newSize);
+    Cube cubeX0Y0Z1(centerX0Y0Z1, newSize);
+    Cube cubeX0Y1Z0(centerX0Y1Z0, newSize);
+    Cube cubeX0Y1Z1(centerX0Y1Z1, newSize);
+    Cube cubeX1Y0Z0(centerX1Y0Z0, newSize);
+    Cube cubeX1Y0Z1(centerX1Y0Z1, newSize);
+    Cube cubeX1Y1Z0(centerX1Y1Z0, newSize);
+    Cube cubeX1Y1Z1(centerX1Y1Z1, newSize);
+
+    this->x0y0z0 = new Octree(cubeX0Y0Z0, this->capacity);
+    this->x0y0z1 = new Octree(cubeX0Y0Z1, this->capacity);
+    this->x0y1z0 = new Octree(cubeX0Y1Z0, this->capacity);
+    this->x0y1z1 = new Octree(cubeX0Y1Z1, this->capacity);
+    this->x1y0z0 = new Octree(cubeX1Y0Z0, this->capacity);
+    this->x1y0z1 = new Octree(cubeX1Y0Z1, this->capacity);
+    this->x1y1z0 = new Octree(cubeX1Y1Z0, this->capacity);
+    this->x1y1z1 = new Octree(cubeX1Y1Z1, this->capacity);
+
+	this->isDivided = true;
+}
+
+void Octree::query(Cube range, vector<Node> &nodesFound) {
+	if (!boundary.intersects(range)) {
+		return;
+	} else {
+		for (auto& node : nodesFound) {
+			if (range.contains(node.getCoordinate())) {
+				nodesFound.push_back(node);
+			}
+		}
+		if (this->isDivided) {
+			this->x0y0z0->query(range, nodesFound);
+			this->x0y0z1->query(range, nodesFound);
+			this->x0y1z0->query(range, nodesFound);
+			this->x0y1z1->query(range, nodesFound);
+			this->x1y0z0->query(range, nodesFound);
+			this->x1y0z1->query(range, nodesFound);
+			this->x1y1z0->query(range, nodesFound);
+			this->x1y1z1->query(range, nodesFound);
+		}
+	}
 }
