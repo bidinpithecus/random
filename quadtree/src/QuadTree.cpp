@@ -86,7 +86,6 @@ void QuadTree::query(Rectangle range, std::vector<Point>& found) {
     }
 }
 
-
 void QuadTree::print() {
     if (this->isDivided) {
         this->northWest->print();

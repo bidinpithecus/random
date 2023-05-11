@@ -3,12 +3,17 @@
 
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 struct Point {
     float x;
     float y;
-    Point(float x, float y) : x(x), y(y) {};
+	float highlight;
+    Point(float x, float y) : x(x), y(y) { highlight = false; };
     Point() : x(0), y(0) {};
+	float dist(Point other) {
+		return sqrt(pow(this->x - other.x, 2) + pow(this->y - other.y, 2));
+	};
 };
 
 struct Rectangle {
@@ -40,7 +45,7 @@ class QuadTree {
         QuadTree* getNorthEast();
         QuadTree* getSouthWest();
         QuadTree* getSouthEast();
-        
+
         bool insert(Point point);
         void subdivide();
         void query(Rectangle range, std::vector<Point>& found);

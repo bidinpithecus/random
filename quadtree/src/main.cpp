@@ -3,26 +3,24 @@
 #include <iostream>
 #include "QuadTree.hpp"
 
-QuadTree quadtree;
 const int WINDOW_WIDTH = 600;
 const int WINDOW_HEIGHT = 600;
+const float pointSize = 1.0;
+int randomInt(int min, int max);
+Rectangle boundary(Point(1, 1), Point(WINDOW_WIDTH, WINDOW_HEIGHT));
+QuadTree quadtree = QuadTree(boundary, 4);
+
+std::vector<Point> points;
 
 void drawQuadTree(QuadTree* tree) {
     // Draw the boundary of the current QuadTree node
     const Rectangle& boundary = tree->getBoundary();
+	glColor3f(0.2, 0.2, 0.2);
     glBegin(GL_LINE_LOOP);
-    glVertex2f(boundary.topLeft.x, boundary.topLeft.y);
-    glVertex2f(boundary.bottomRight.x, boundary.topLeft.y);
-    glVertex2f(boundary.bottomRight.x, boundary.bottomRight.y);
-    glVertex2f(boundary.topLeft.x, boundary.bottomRight.y);
-    glEnd();
-
-    // Draw the points inside the current QuadTree node
-    glPointSize(3.0);
-    glBegin(GL_POINTS);
-    for (const auto& point : tree->getPoints()) {
-        glVertex2f(point.x, point.y);
-    }
+		glVertex2f(boundary.topLeft.x, boundary.topLeft.y);
+		glVertex2f(boundary.bottomRight.x, boundary.topLeft.y);
+		glVertex2f(boundary.bottomRight.x, boundary.bottomRight.y);
+		glVertex2f(boundary.topLeft.x, boundary.bottomRight.y);
     glEnd();
 
     // Recursively draw the QuadTree subdivisions if it is divided
@@ -34,49 +32,48 @@ void drawQuadTree(QuadTree* tree) {
     }
 }
 
-void drawRange(const Rectangle& range) {
-    glLineWidth(2.0);
-    glColor3f(1.0, 0.0, 0.0); // Set the color to red
-
-    glBegin(GL_LINE_LOOP);
-    glVertex2f(range.topLeft.x, range.topLeft.y);
-    glVertex2f(range.bottomRight.x, range.topLeft.y);
-    glVertex2f(range.bottomRight.x, range.bottomRight.y);
-    glVertex2f(range.topLeft.x, range.bottomRight.y);
-    glEnd();
-
-    glColor3f(1.0, 0.0, 0.0); // Set the color to blue
-
-    glPointSize(3.0);
+void showPoints() {
+	QuadTree qTree = QuadTree(boundary, 4);
+    glPointSize(pointSize);
     glBegin(GL_POINTS);
-
-    std::vector<Point> foundPoints;
-    quadtree.query(range, foundPoints);
-    for (const auto& point : foundPoints) {
+	for (auto& point : points) {
+		point.x += randomInt(-1, 1);
+		point.y += randomInt(-1, 1);
+		if (point.highlight) {
+			glColor3f(1, 1, 1);
+		} else {
+		    glColor3f(0.5, 0.5, 0.5); // Set the color to white
+		}
+		point.highlight = false;
+		qTree.insert(point);
         glVertex2f(point.x, point.y);
-    }
+	}
     glEnd();
+
+	for (auto& point : points) {
+		std::vector<Point> wanted;
+		Rectangle range = Rectangle(Point(point.x - (pointSize * 2), point.y - (pointSize * 2)), Point(point.x + (pointSize * 2), point.y + (pointSize * 2)));
+		qTree.query(range, wanted);
+		for (auto& otherPoint : wanted) {
+			if (((point.x != otherPoint.x) || (point.y != otherPoint.y)) && point.dist(otherPoint) < pointSize * 2) {
+				point.highlight = true;
+				otherPoint.highlight = true;
+			}
+		}
+	}
+	drawQuadTree(&qTree);
 }
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
-    glColor3f(1.0, 1.0, 1.0); // Set the color to white
-
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
     glMatrixMode(GL_MODELVIEW);
 
-    // Draw the QuadTree
-    drawQuadTree(&quadtree);
-
-    // Define the range to query
-    Rectangle range(Point(200, 200), Point(400, 400));
-
-    // Draw the queried range and colorize the points within the range
-    drawRange(range);
+	showPoints();
 
     glFlush();
     glutSwapBuffers();
@@ -105,11 +102,9 @@ int randomInt(int min, int max) {
 }
 
 int main(int argc, char** argv) {
-    Rectangle boundary(Point(1, 1), Point(WINDOW_WIDTH, WINDOW_HEIGHT));
-    quadtree = QuadTree(boundary, 4);
-
-    for (int i = 0; i < 5; i++) {
-        quadtree.insert(Point(randomInt(0, WINDOW_WIDTH), randomInt(0, WINDOW_HEIGHT)));
+    for (int i = 0; i < 1000; i++) {
+		Point point = Point(randomInt(0, WINDOW_WIDTH), randomInt(0, WINDOW_HEIGHT));
+		points.push_back(point);
     }
 
     glutInit(&argc, argv);
@@ -118,6 +113,7 @@ int main(int argc, char** argv) {
     glutCreateWindow("QuadTree Visualization");
 
     glutDisplayFunc(display);
+	glutIdleFunc(display);
     glutReshapeFunc(reshape);
 
     glutMainLoop();
