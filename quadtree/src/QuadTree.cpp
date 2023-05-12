@@ -100,3 +100,25 @@ void QuadTree::print() {
         std::cout << std::endl;
     }
 }
+
+std::string QuadTree::generateGraphviz() {
+    std::stringstream ss;
+    ss << "digraph QuadTree {\n";
+    generateGraphvizRecursive(ss);
+    ss << "}\n";
+    return ss.str();
+}
+
+void QuadTree::generateGraphvizRecursive(std::stringstream& ss) {
+    ss << "\"" << this << "\" [label=\"" << "(" << this->boundary.center.x << ", " << this->boundary.center.y << ")\", shape=circle];\n";
+    if (isDivided) {
+        ss << "\"" << this << "\" -> \"" << northWest << "\";\n";
+        ss << "\"" << this << "\" -> \"" << northEast << "\";\n";
+        ss << "\"" << this << "\" -> \"" << southWest << "\";\n";
+        ss << "\"" << this << "\" -> \"" << southEast << "\";\n";
+        northWest->generateGraphvizRecursive(ss);
+        northEast->generateGraphvizRecursive(ss);
+        southWest->generateGraphvizRecursive(ss);
+        southEast->generateGraphvizRecursive(ss);
+    }
+}

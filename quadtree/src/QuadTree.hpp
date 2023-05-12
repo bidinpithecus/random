@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <cmath>
 
 struct Point {
@@ -11,8 +13,8 @@ struct Point {
 	float highlight;
     Point(float x, float y) : x(x), y(y) { highlight = false; };
     Point() : x(0), y(0) {};
-	float dist(Point other) {
-		return sqrt(pow(this->x - other.x, 2) + pow(this->y - other.y, 2));
+	float squaredDist(Point other) {
+		return pow(this->x - other.x, 2) + pow(this->y - other.y, 2);
 	};
 };
 
@@ -50,6 +52,7 @@ class QuadTree {
         void subdivide();
         void query(Rectangle range, std::vector<Point>& found);
         void print();
+		std::string generateGraphviz();
 
     private:
         Rectangle boundary;
@@ -61,6 +64,8 @@ class QuadTree {
         QuadTree* northEast;
         QuadTree* southWest;
         QuadTree* southEast;
+
+		void generateGraphvizRecursive(std::stringstream& ss);
 };
 
 #endif
