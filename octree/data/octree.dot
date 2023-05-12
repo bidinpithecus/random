@@ -1,0 +1,35 @@
+digraph Octree {
+"0x558d80b36300" [label="0, 0, 0"shape=circle];
+"0x558d80b36300" -> "0x558d8262ece0";
+"0x558d80b36300" -> "0x558d8262ed60";
+"0x558d80b36300" -> "0x558d8262ede0";
+"0x558d80b36300" -> "0x558d8262ee60";
+"0x558d80b36300" -> "0x558d8262eee0";
+"0x558d80b36300" -> "0x558d8262ef60";
+"0x558d80b36300" -> "0x558d8262efe0";
+"0x558d80b36300" -> "0x558d8262f060";
+"0x558d8262ece0" [label="-200, -200, -200"shape=circle];
+"0x558d8262ed60" [label="-200, -200, 200"shape=circle];
+"0x558d8262ede0" [label="-200, 200, -200"shape=circle];
+"0x558d8262ee60" [label="-200, 200, 200"shape=circle];
+"0x558d8262eee0" [label="200, -200, -200"shape=circle];
+"0x558d8262eee0" -> "0x558d8262f4f0";
+"0x558d8262eee0" -> "0x558d8262f570";
+"0x558d8262eee0" -> "0x558d8262f5f0";
+"0x558d8262eee0" -> "0x558d8262f670";
+"0x558d8262eee0" -> "0x558d8262f6f0";
+"0x558d8262eee0" -> "0x558d8262f770";
+"0x558d8262eee0" -> "0x558d8262f7f0";
+"0x558d8262eee0" -> "0x558d8262f870";
+"0x558d8262f4f0" [label="100, -300, -300"shape=circle];
+"0x558d8262f570" [label="100, -300, -100"shape=circle];
+"0x558d8262f5f0" [label="100, -100, -300"shape=circle];
+"0x558d8262f670" [label="100, -100, -100"shape=circle];
+"0x558d8262f6f0" [label="300, -300, -300"shape=circle];
+"0x558d8262f770" [label="300, -300, -100"shape=circle];
+"0x558d8262f7f0" [label="300, -100, -300"shape=circle];
+"0x558d8262f870" [label="300, -100, -100"shape=circle];
+"0x558d8262ef60" [label="200, -200, 200"shape=circle];
+"0x558d8262efe0" [label="200, 200, -200"shape=circle];
+"0x558d8262f060" [label="200, 200, 200"shape=circle];
+}

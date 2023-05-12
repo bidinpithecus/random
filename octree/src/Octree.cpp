@@ -3,8 +3,8 @@
 using namespace std;
 
 Octree::Octree() {}
-
 Octree::Octree(Cube boundary, int capacity) : boundary(boundary), capacity(capacity) { isDivided = false; }
+Octree::~Octree() {}
 
 bool Octree::isItDivided() { return isDivided; }
 Cube Octree::getBoundary() { return boundary; }
@@ -23,31 +23,33 @@ Octree* Octree::getX1Y1Z1() { return x1y1z1; }
 	or false if it wasn't able to do so.
 */
 bool Octree::insert(Node node) {
-	// Node is outside of the boundary, unable to insert
-	if (!this->boundary.contains(node.getCoordinate())) { return false; }
+    // Node is outside of the boundary, unable to insert
+    if (!this->boundary.contains(node.getCoordinate())) {
+        return false;
+    }
 
-	// If octree is available, add the node in the list of nodes of this octree
-	// If not, subdivide it, try to insert it again and reset the nodes of the octree
-	if (this->nodes.size() < this->capacity && !this->isDivided) {
-		this->nodes.push_back(node);
-		return true;
-	} else {
-		if (!this->isDivided) {
-			vector<Node> emptyVec;
-			this->subdivide();
+    // If octree is available, add the node in the list of nodes of this octree
+    // If not, subdivide it, try to insert it again, and reset the nodes of the octree
+    if (this->nodes.size() < this->capacity && !this->isDivided) {
+        this->nodes.push_back(node);
+        return true;
+    } else {
+        if (!this->isDivided) {
+            vector<Node> emptyVec;
+            this->subdivide();
 
-			for (auto node : this->nodes) {
-				this->insert(node);
-			}
-			this->nodes = emptyVec;
-		}
+            for (auto& n : this->nodes) {
+                this->insert(n);
+            }
+            this->nodes = emptyVec;
+        }
 
-		return
-			this->x0y0z0->insert(node) || this->x0y0z1->insert(node) ||
-			this->x0y1z0->insert(node) || this->x0y1z1->insert(node) ||
-			this->x1y0z0->insert(node) || this->x1y0z1->insert(node) ||
-			this->x1y1z0->insert(node) || this->x1y1z1->insert(node);
-	}
+        return
+            this->x0y0z0->insert(node) || this->x0y0z1->insert(node) ||
+            this->x0y1z0->insert(node) || this->x0y1z1->insert(node) ||
+            this->x1y0z0->insert(node) || this->x1y0z1->insert(node) ||
+            this->x1y1z0->insert(node) || this->x1y1z1->insert(node);
+    }
 }
 
 /*
@@ -80,16 +82,14 @@ void Octree::subdivide() {
 
     this->x0y0z0 = new Octree(cubeX0Y0Z0, this->capacity);
     this->x0y0z1 = new Octree(cubeX0Y0Z1, this->capacity);
-    this->x0y1z0 = new Octree(cubeX0Y1Z0, this->capacity);
-    this->x0y1z1 = new Octree(cubeX0Y1Z1, this->capacity);
-    this->x1y0z0 = new Octree(cubeX1Y0Z0, this->capacity);
-    this->x1y0z1 = new Octree(cubeX1Y0Z1, this->capacity);
-    this->x1y1z0 = new Octree(cubeX1Y1Z0, this->capacity);
-    this->x1y1z1 = new Octree(cubeX1Y1Z1, this->capacity);
-
+	this->x0y1z0 = new Octree(cubeX0Y1Z0, this->capacity);
+	this->x0y1z1 = new Octree(cubeX0Y1Z1, this->capacity);
+	this->x1y0z0 = new Octree(cubeX1Y0Z0, this->capacity);
+	this->x1y0z1 = new Octree(cubeX1Y0Z1, this->capacity);
+	this->x1y1z0 = new Octree(cubeX1Y1Z0, this->capacity);
+	this->x1y1z1 = new Octree(cubeX1Y1Z1, this->capacity);
 	this->isDivided = true;
 }
-
 void Octree::query(Cube range, vector<Node> &nodesFound) {
 	if (!boundary.intersects(range)) {
 		return;
@@ -109,5 +109,57 @@ void Octree::query(Cube range, vector<Node> &nodesFound) {
 			this->x1y1z0->query(range, nodesFound);
 			this->x1y1z1->query(range, nodesFound);
 		}
+	}
+}
+
+void Octree::print() {
+    cout << "Points in boundaries ((" << this->boundary.getMinX() << " - " << this->boundary.getMaxX() << "), (" << this->boundary.getMinY() << " - " << this->boundary.getMaxY() << "), (" << this->boundary.getMinZ() << " - " << this->boundary.getMaxZ() << ")): ";
+
+    if (this->isDivided) {
+        cout << endl;
+        this->getX0Y0Z0()->print();
+        this->getX0Y0Z1()->print();
+        this->getX0Y1Z0()->print();
+        this->getX0Y1Z1()->print();
+        this->getX1Y0Z0()->print();
+        this->getX1Y0Z1()->print();
+        this->getX1Y1Z0()->print();
+        this->getX1Y1Z1()->print();
+    } else {
+        for (auto& node : this->getNodes()) {
+            cout << "(" << node.getCoordinate().getX() << ", " << node.getCoordinate().getY() << ", " << node.getCoordinate().getZ() << ") ";
+        }
+        cout << endl;
+    }
+}
+
+string Octree::generateGraph() {
+	std::stringstream ss;
+	ss << "digraph Octree {\n";
+	// ss << "splines = false" << endl;
+	generateGraphRecursive(ss);
+	ss << "}\n";
+	return ss.str();
+}
+
+void Octree::generateGraphRecursive(std::stringstream& ss) {
+	ss << "\"" << this << "\" [label=\"" << this->boundary.getCenter().getX() << ", " <<this->boundary.getCenter().getY() << ", " << this->boundary.getCenter().getZ() << "\"shape=circle];\n";
+	if (isDivided) {
+		ss << "\"" << this << "\" -> \"" << x0y0z0 << "\";\n";
+		ss << "\"" << this << "\" -> \"" << x0y0z1 << "\";\n";
+		ss << "\"" << this << "\" -> \"" << x0y1z0 << "\";\n";
+		ss << "\"" << this << "\" -> \"" << x0y1z1 << "\";\n";
+		ss << "\"" << this << "\" -> \"" << x1y0z0 << "\";\n";
+		ss << "\"" << this << "\" -> \"" << x1y0z1 << "\";\n";
+		ss << "\"" << this << "\" -> \"" << x1y1z0 << "\";\n";
+		ss << "\"" << this << "\" -> \"" << x1y1z1 << "\";\n";
+		x0y0z0->generateGraphRecursive(ss);
+		x0y0z1->generateGraphRecursive(ss);
+		x0y1z0->generateGraphRecursive(ss);
+		x0y1z1->generateGraphRecursive(ss);
+		x1y0z0->generateGraphRecursive(ss);
+		x1y0z1->generateGraphRecursive(ss);
+		x1y1z0->generateGraphRecursive(ss);
+		x1y1z1->generateGraphRecursive(ss);
 	}
 }

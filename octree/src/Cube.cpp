@@ -3,6 +3,7 @@
 Cube::Cube() {}
 Cube::Cube(float sideSize) : center(Coordinate(0)), sideSize(sideSize) {}
 Cube::Cube(Coordinate center, float sideSize) : center(center), sideSize(sideSize) {}
+Cube::~Cube() {}
 
 Coordinate Cube::getCenter() { return this->center; }
 float Cube::getSideSize() { return this->sideSize; }

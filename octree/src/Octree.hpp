@@ -4,6 +4,9 @@
 #include <vector>
 #include "Cube.hpp"
 #include "Node.hpp"
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 class Octree {
 	public:
@@ -25,11 +28,12 @@ class Octree {
 		bool insert(Node node);
 		void subdivide();
 		void query(Cube range, std::vector<Node>& nodesFound);
+		std::string generateGraph();
 		void print();
 
 	private:
 		Cube boundary;
-		int capacity;
+		long unsigned int capacity;
 		std::vector<Node> nodes;
 		bool isDivided;
 
@@ -41,6 +45,8 @@ class Octree {
 		Octree* x1y0z1;
 		Octree* x1y1z0;
 		Octree* x1y1z1;
+
+		void generateGraphRecursive(std::stringstream& ss);
 };
 
 #endif

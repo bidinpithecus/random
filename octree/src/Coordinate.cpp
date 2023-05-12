@@ -2,10 +2,9 @@
 #include <cmath>
 
 Coordinate::Coordinate() : x(0), y(0), z(0) {}
-
 Coordinate::Coordinate(float same) : x(same), y(same), z(same) {}
-
 Coordinate::Coordinate(float x, float y, float z) : x(x), y(y), z(z) {}
+Coordinate::~Coordinate() {}
 
 float Coordinate::getX() { return this->x; }
 float Coordinate::getY() { return this->y; }
