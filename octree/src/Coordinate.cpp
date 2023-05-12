@@ -62,7 +62,7 @@ void Coordinate::operator/=(float num) {
 	*this = *this / num;
 }
 
-float Coordinate::distance(Coordinate coordinate) {
+float Coordinate::squaredDistance(Coordinate coordinate) {
 	return sqrt(
 		pow(this->x - coordinate.x, 2) +
 		pow(this->y - coordinate.y, 2) +

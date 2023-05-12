@@ -27,7 +27,7 @@ class Coordinate {
 		void operator *=(float num);
 		void operator /=(float num);
 
-		float distance(Coordinate coordinate);
+		float squaredDistance(Coordinate coordinate);
 
 	private:
 		float x;
