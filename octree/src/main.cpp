@@ -18,48 +18,48 @@ void drawTree(Octree* tree) {
     // Draw the cube
     glColor3f(0.4, 0.4, 0.4);
     glBegin(GL_LINE_LOOP);
-    // Bottom face
-    glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMinZ());
-    glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMinZ());
-    glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMaxZ());
-    glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMaxZ());
-    glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMinZ());
-    // Top face
-    glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMinZ());
-    glVertex3f(boundary.getMaxX(), boundary.getMaxY(), boundary.getMinZ());
-    glVertex3f(boundary.getMaxX(), boundary.getMaxY(), boundary.getMaxZ());
-    glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMaxZ());
-    glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMinZ());
-    // Front face
-    glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMinZ());
-    glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMinZ());
-    glVertex3f(boundary.getMaxX(), boundary.getMaxY(), boundary.getMinZ());
-    glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMinZ());
-    glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMinZ());
-    // Back face
-    glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMaxZ());
-    glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMaxZ());
-    glVertex3f(boundary.getMaxX(), boundary.getMaxY(), boundary.getMaxZ());
-    glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMaxZ());
-    glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMaxZ());
-    // Left face
-    glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMinZ());
-    glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMinZ());
-    glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMaxZ());
-    glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMaxZ());
-    glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMinZ());
-    // Right face
-    glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMinZ());
-    glVertex3f(boundary.getMaxX(), boundary.getMaxY(), boundary.getMinZ());
-    glVertex3f(boundary.getMaxX(), boundary.getMaxY(), boundary.getMaxZ());
-    glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMaxZ());
-    glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMinZ());
+		// Bottom face
+		glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMinZ());
+		glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMinZ());
+		glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMaxZ());
+		glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMaxZ());
+		glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMinZ());
+		// Top face
+		glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMinZ());
+		glVertex3f(boundary.getMaxX(), boundary.getMaxY(), boundary.getMinZ());
+		glVertex3f(boundary.getMaxX(), boundary.getMaxY(), boundary.getMaxZ());
+		glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMaxZ());
+		glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMinZ());
+		// Front face
+		glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMinZ());
+		glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMinZ());
+		glVertex3f(boundary.getMaxX(), boundary.getMaxY(), boundary.getMinZ());
+		glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMinZ());
+		glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMinZ());
+		// Back face
+		glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMaxZ());
+		glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMaxZ());
+		glVertex3f(boundary.getMaxX(), boundary.getMaxY(), boundary.getMaxZ());
+		glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMaxZ());
+		glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMaxZ());
+		// Left face
+		glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMinZ());
+		glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMinZ());
+		glVertex3f(boundary.getMinX(), boundary.getMaxY(), boundary.getMaxZ());
+		glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMaxZ());
+		glVertex3f(boundary.getMinX(), boundary.getMinY(), boundary.getMinZ());
+		// Right face
+		glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMinZ());
+		glVertex3f(boundary.getMaxX(), boundary.getMaxY(), boundary.getMinZ());
+		glVertex3f(boundary.getMaxX(), boundary.getMaxY(), boundary.getMaxZ());
+		glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMaxZ());
+		glVertex3f(boundary.getMaxX(), boundary.getMinY(), boundary.getMinZ());
     glEnd();
 
-	glPointSize(pointSize);
     glColor3f(0.8, 0.8, 0.8);
 	glBegin(GL_POINTS);
 	for (auto node : tree->getNodes()) {
+		glPointSize(node.getSize());
 		glVertex3f(node.getCoordinate().getX(), node.getCoordinate().getY(), node.getCoordinate().getZ());
 	}
 	glEnd();
@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
 		int randomY = randomInt(-octree.getBoundary().getSideSize() / 2, octree.getBoundary().getSideSize() / 2);
 		int randomZ = randomInt(-octree.getBoundary().getSideSize() / 2, octree.getBoundary().getSideSize() / 2);
 
-		Node node(Coordinate(randomX, randomY, randomZ));
+		Node node(Coordinate(randomX, randomY, randomZ), pointSize);
         octree.insert(node);
     }
 

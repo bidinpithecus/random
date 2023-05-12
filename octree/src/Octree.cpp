@@ -90,6 +90,7 @@ void Octree::subdivide() {
 	this->x1y1z1 = new Octree(cubeX1Y1Z1, this->capacity);
 	this->isDivided = true;
 }
+
 void Octree::query(Cube range, vector<Node> &nodesFound) {
 	if (!boundary.intersects(range)) {
 		return;
@@ -113,7 +114,7 @@ void Octree::query(Cube range, vector<Node> &nodesFound) {
 }
 
 void Octree::print() {
-    cout << "Points in boundaries ((" << this->boundary.getMinX() << " - " << this->boundary.getMaxX() << "), (" << this->boundary.getMinY() << " - " << this->boundary.getMaxY() << "), (" << this->boundary.getMinZ() << " - " << this->boundary.getMaxZ() << ")): ";
+    cout << "Points of nodes in boundary ((" << this->boundary.getMinX() << ") - (" << this->boundary.getMaxX() << ")): ";
 
     if (this->isDivided) {
         cout << endl;

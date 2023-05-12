@@ -6,13 +6,17 @@
 class Node {
 	public:
 		Node();
-		Node(Coordinate coordinate);
+		Node(Coordinate coordinate, float size);
 		~Node();
 
 		Coordinate getCoordinate();
+		float getSize();
+		void setCoordinate(Coordinate coordinate);
+		void setSize(float size);
 
 	private:
 		Coordinate coordinate;
+		float size;
 };
 
 #endif
