@@ -31,8 +31,9 @@ struct Rectangle {
        return (point.x >= topLeft.x && point.x <= bottomRight.x) && (point.y >= topLeft.y && point.y <= bottomRight.y);
     }
     bool intersects(Rectangle rectangle) {
-        return !(this->topLeft.x > rectangle.bottomRight.x || this->bottomRight.x < rectangle.topLeft.x ||
-        this->bottomRight.y < rectangle.topLeft.y || this->topLeft.y > rectangle.bottomRight.y);
+		bool intersectX = (rectangle.topLeft.x <= this->bottomRight.x) && (rectangle.bottomRight.x >= this->topLeft.x);
+		bool intersectY = (rectangle.topLeft.y <= this->bottomRight.y) && (rectangle.bottomRight.y >= this->topLeft.y);
+        return intersectX && intersectY;
     }
 };
 
@@ -56,7 +57,7 @@ class QuadTree {
 
     private:
         Rectangle boundary;
-        int capacity;
+        long unsigned int capacity;
         std::vector<Point> points;
         bool isDivided;
 

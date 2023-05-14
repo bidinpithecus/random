@@ -95,7 +95,7 @@ void Octree::query(Cube range, vector<Node> &nodesFound) {
 	if (!boundary.intersects(range)) {
 		return;
 	} else {
-		for (auto& node : nodesFound) {
+		for (auto& node : this->nodes) {
 			if (range.contains(node.getCoordinate())) {
 				nodesFound.push_back(node);
 			}
