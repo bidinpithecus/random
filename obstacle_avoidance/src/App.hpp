@@ -4,6 +4,9 @@
 #include "Utils.hpp"
 #include "Camera.hpp"
 
+#define WINDOW_HEIGHT 640
+#define WINDOW_WIDTH 480
+
 class App {
 	public:
 		App();

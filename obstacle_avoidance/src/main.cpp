@@ -1,5 +1,5 @@
+#include "App.hpp"
 #include "Camera.hpp"
-#include "snowman.h"
 #include "Color.hpp"
 #include "Shapes.hpp"
 #include "Helpers.hpp"
@@ -7,6 +7,7 @@
 #include <math.h>
 #include <time.h>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -25,6 +26,7 @@ Rotation rotation;
 GLUquadricObj *pObj;
 
 vector<Coordinate> fibPoints;
+float howFarOneSees = 10.0;
 
 float phi = M_PI * (sqrt(5.0) - 1.0);
 
@@ -36,12 +38,14 @@ vector<Coordinate> fibonacciSphere(float scalar, int numOfPoints) {
 	Coordinate coord;
 	for (int i = 0; i < numOfPoints; i++) {
 		theta = phi * i;
-		y = 1 - (i / (float) (numOfPoints - 1)) * 2;
-		radius = sqrt(1 - y * y);
-		x = cos(theta) * radius;
-		z = sin(theta) * radius;
+		if (theta / (numOfPoints * 0.01) >= 300) {
+			z = 1 - (i / (float) (numOfPoints - 1)) * 2;
+			radius = sqrt(1 - z * z);
+			y = cos(theta) * radius;
+			x = sin(theta) * radius;
 
-		points.push_back(Coordinate(x, y, z) * scalar);
+			points.push_back(Coordinate(x, y, z) * scalar);
+		}
 	}
 	return points;
 }
@@ -52,22 +56,21 @@ void drawScene(void) {
 
 	glPushMatrix();
 		glTranslatef(0.0, 0.0, 0.0);
-		glColor3f(1.0, 1.0, 1.0);
-		gluSphere(pObj, 1, 26, 13);
+		glColor3f(0.0, 0.0, 0.0);
+		gluSphere(pObj, 1, 54, 26);
 	glPopMatrix();
 
 	for (auto coord : fibPoints) {
 	glPushMatrix();
 		glTranslatef(coord.getX(), coord.getY(), coord.getZ());
 		glColor3f(0, 1.0, 0.0);
-		gluSphere(pObj, 0.01, 26, 13);
+		gluSphere(pObj, 0.01, 4, 4);
 	glPopMatrix();
 	}
 }
 
 int main(int argc, char *argv[]) {
-	fibPoints = fibonacciSphere(1, 1000);
-    // Seed the random number generator with the current time
+	fibPoints = fibonacciSphere(1, 450);
     srand((unsigned int)time(NULL));
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
