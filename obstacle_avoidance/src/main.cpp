@@ -26,7 +26,7 @@ Rotation rotation;
 GLUquadricObj *pObj;
 
 vector<Coordinate> fibPoints;
-float howFarOneSees = 10.0;
+float howFarOneSees = 5.0;
 
 float phi = M_PI * (sqrt(5.0) - 1.0);
 
@@ -56,16 +56,23 @@ void drawScene(void) {
 
 	glPushMatrix();
 		glTranslatef(0.0, 0.0, 0.0);
-		glColor3f(0.0, 0.0, 0.0);
-		gluSphere(pObj, 1, 54, 26);
+		glColor3f(0.1, 0.1, 0.1);
+		gluSphere(pObj, 1, 26, 13);
 	glPopMatrix();
 
 	for (auto coord : fibPoints) {
 	glPushMatrix();
 		glTranslatef(coord.getX(), coord.getY(), coord.getZ());
-		glColor3f(0, 1.0, 0.0);
+		glColor3f(0, 1.0, 1.0);
 		gluSphere(pObj, 0.01, 4, 4);
 	glPopMatrix();
+
+		glLineWidth(1);
+		glBegin(GL_LINES);
+			glVertex3f(coord.getX(), coord.getY(), coord.getZ());
+			coord *= howFarOneSees;
+			glVertex3f(coord.getX(), coord.getY(), coord.getZ());
+		glEnd();
 	}
 }
 
