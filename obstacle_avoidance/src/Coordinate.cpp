@@ -62,8 +62,12 @@ void Coordinate::operator/=(float num) {
 }
 
 float Coordinate::squaredDistance(Coordinate coordinate) {
-	return sqrt(
+	return
 		pow(this->x - coordinate.x, 2) +
 		pow(this->y - coordinate.y, 2) +
-		pow(this->z - coordinate.z, 2));
+		pow(this->z - coordinate.z, 2);
+}
+
+float Coordinate::magnitude() {
+	return sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2));
 }
