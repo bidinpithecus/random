@@ -2,6 +2,7 @@
 #include "Shapes.hpp"
 #include "Coordinate.hpp"
 #include "Helpers.hpp"
+#include <GL/freeglut_std.h>
 #include <ctime>
 #include <vector>
 #include <iostream>
@@ -51,7 +52,8 @@ void drawScene(void) {
 	pObj = gluNewQuadric();
 	gluQuadricNormals(pObj, GLU_SMOOTH);
 
-	for (auto particle : spheres) {
+	for (auto& particle : spheres) {
+		particle.first.setZ(particle.first.getZ() + 0.01);
 		drawParticle(particle.first, particle.second, 450);
 	}
 }
@@ -74,6 +76,7 @@ int main(int argc, char **argv) {
 	glutKeyboardFunc(normalKeyPressed);
 	glutSpecialFunc(specialKeyPressed);
 	glutDisplayFunc(renderScene);
+	glutIdleFunc(renderScene);
 	setupRC();
 	glutMainLoop();
 
