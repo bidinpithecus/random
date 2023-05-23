@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Coordinate.hpp"
+#include "Helpers.hpp"
 
 class Particle {
 	public:
@@ -12,25 +13,28 @@ class Particle {
 		Coordinate getPosition();
 		Coordinate getVelocity();
 		std::vector<Coordinate> getFov();
-		int getViewDistance();
-		int getNumOfMicroEyes();
+		float getViewDistance();
+		float getSpeed();
+		float getSize();
 		void setAcceleration(Coordinate acceleration);
 		void setPosition(Coordinate position);
 		void setVelocity(Coordinate velocity);
-		void setFov(std::vector<Coordinate> fov);
-		void setViewDistance(int viewDistance);
-		void setNumOfMicroEyes(int numOfMicroEyes);
+		void setViewDistance(float viewDistance);
+		void setSpeed(float speed);
+		void setSize(float size);
 
+		void setFov();
 		void update();
-		void show();
+		void show(GLUquadricObj *pObj);
 
 	private:
 		Coordinate acceleration;
 		Coordinate position;
 		Coordinate velocity;
 		std::vector<Coordinate> fov;
-		int viewDistance;
-		int numOfMicroEyes;
+		float viewDistance;
+		float speed;
+		float size;
 };
 
 #endif
