@@ -1,9 +1,4 @@
-/*
-	void show();
-*/
-
 #include "Particle.hpp"
-#include "Coordinate.hpp"
 #include "Helpers.hpp"
 
 Particle::Particle() { this->fov.assign(fibonacciPoints.size(), Coordinate(0)); }
@@ -31,10 +26,11 @@ void Particle::setFov() {
 }
 
 void Particle::update() {
-	Coordinate desiredDirection = this->fov.back();
-	this->position += this->velocity;
-	this->velocity = (desiredDirection * this->speed) - this->position;
-	// this->position = (desiredDirection) - this->position;
+	this->setFov();
+
+	Coordinate desiredCoordinate = this->fov.at(fibonacciPoints.size() - 1) * this->speed;
+	this->position = desiredCoordinate - this->position;
+	// this->velocity = (desiredDirection * this->speed) - this->position;
 }
 
 void Particle::show(GLUquadricObj *pObj) {

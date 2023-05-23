@@ -38,11 +38,10 @@ int main(int argc, char **argv) {
 		int z = randomNum(-10, 10);
 		particle.setSize(0.5);
 		particle.setViewDistance(2.0);
-		particle.setSpeed(0.1);
+		particle.setSpeed(0.001);
 		particle.setPosition(Coordinate(x, y, z));
 		particle.setVelocity(Coordinate(0));
 		particle.setAcceleration(Coordinate(0));
-		particle.setFov();
 		particles.push_back(particle);
 	}
 	glutInit(&argc, argv);
