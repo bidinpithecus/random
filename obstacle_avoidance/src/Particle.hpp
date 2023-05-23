@@ -8,7 +8,7 @@
 class Particle {
 	public:
 		Particle();
-		Particle(Coordinate acceleration, Coordinate position, Coordinate velocity, int viewDistance, int numOfMicroEyes);
+		Particle(Coordinate acceleration, Coordinate position, Coordinate velocity, int viewDistance, float size, float speed);
 		Coordinate getAcceleration();
 		Coordinate getPosition();
 		Coordinate getVelocity();
@@ -33,8 +33,8 @@ class Particle {
 		Coordinate velocity;
 		std::vector<Coordinate> fov;
 		float viewDistance;
-		float speed;
 		float size;
+		float speed;
 };
 
 #endif

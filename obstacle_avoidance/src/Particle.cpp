@@ -2,7 +2,7 @@
 #include "Helpers.hpp"
 
 Particle::Particle() { this->fov.assign(fibonacciPoints.size(), Coordinate(0)); }
-Particle::Particle(Coordinate acceleration, Coordinate position, Coordinate velocity, int viewDistance, int size): acceleration(acceleration), position(position), velocity(velocity), viewDistance(viewDistance), size(size) { this->fov.assign(fibonacciPoints.size(), Coordinate(0)); }
+Particle::Particle(Coordinate acceleration, Coordinate position, Coordinate velocity, int viewDistance, float size, float speed): acceleration(acceleration), position(position), velocity(velocity), viewDistance(viewDistance), size(size), speed(speed) { this->fov.assign(fibonacciPoints.size(), Coordinate(0));  setFov(); }
 
 Coordinate Particle::getAcceleration() { return acceleration; }
 Coordinate Particle::getPosition() { return position; }

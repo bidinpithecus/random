@@ -21,12 +21,17 @@ extern int width;
 extern int xPos;
 extern int yPos;
 extern bool isFullScreen;
+extern int frameCount;
+extern int currentTime;
+extern int previousTime;
+extern float fps;
 
 extern Camera camera;
 
 void drawScene();
 void initScene();
 void finishScene();
+void overlayScene();
 void normalKeyPressed(unsigned char key, int x, int y);
 void renderScene(void);
 void setupRC();

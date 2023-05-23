@@ -1,13 +1,16 @@
 #include "App.hpp"
 #include "Camera.hpp"
 #include "Color.hpp"
+#include <GL/gl.h>
 
 #define UNUSED __attribute__((unused))
 
 Camera camera = Camera(Position(0, 0, -1), Position(0.0f, -0.75f, 5.0f), Position(0.0f, 1.0f, 0.0f), Position(0, 0, 0), 0.05f, -4.0f);
 
-// Change viewing volume and viewport.  Called when window is resized
-void resize(int width, int height) {
+// Change viewing volume and viewport. Called when window is resized
+void resize(int w, int h) {
+	height = h;
+	width = w;
 	GLfloat fAspect;
 
 	// Prevent a divide by zero
@@ -101,6 +104,7 @@ void finishScene() {
 void renderScene() {
 	initScene();
 	drawScene();
+	overlayScene();
 	finishScene();
 }
 
