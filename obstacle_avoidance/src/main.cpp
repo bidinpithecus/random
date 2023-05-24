@@ -3,11 +3,7 @@
 #include "Coordinate.hpp"
 #include "Particle.hpp"
 #include "Helpers.hpp"
-#include <GL/freeglut_std.h>
 #include <GL/gl.h>
-#include <iostream>
-#include <sstream>
-#include <iostream>
 #include <ctime>
 #include <vector>
 
@@ -26,50 +22,6 @@ float fps = 0.0;
 GLUquadricObj *pObj;
 vector<Particle> particles;
 
-void getFps() {
-	currentTime = glutGet(GLUT_ELAPSED_TIME);
-	int deltaTime = currentTime - previousTime;
-	frameCount++;
-
-	if (deltaTime > 100) {
-		fps = frameCount / (deltaTime / 1000.0);
-
-		frameCount = 0;
-		previousTime = currentTime;
-	}
-}
-
-void overlayScene(void) {
-	char fpsStr[16];
-	sprintf(fpsStr, "FPS: %.2f", fps);
-    int strHeight = 12;
-	int strWidth = glutBitmapLength(GLUT_BITMAP_HELVETICA_12, (const unsigned char*)fpsStr);
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-
-    glOrtho(0, width, 0, height, -1, 1);
-
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-
-    glColor3f(1.0f, 1.0f, 1.0f);
-
-    glRasterPos2i(width - strWidth, height - strHeight);
-
-	for (int i = 0; fpsStr[i] != '\0'; i++) {
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, fpsStr[i]);
-	}
-
-    glPopMatrix();
-
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-
-    glMatrixMode(GL_MODELVIEW);
-}
-
 void idle(void) {
 	getFps();
 	glutPostRedisplay();
@@ -79,7 +31,7 @@ void drawScene() {
 	pObj = gluNewQuadric();
 	gluQuadricNormals(pObj, GLU_SMOOTH);
 
-	for (auto& particle : particles) {
+	for (auto particle : particles) {
 		particle.show(pObj);
 	}
 }

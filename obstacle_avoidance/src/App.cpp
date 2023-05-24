@@ -104,7 +104,7 @@ void finishScene() {
 void renderScene() {
 	initScene();
 	drawScene();
-	overlayScene();
+	fpsCounter();
 	finishScene();
 }
 
@@ -174,6 +174,51 @@ void specialKeyPressed(int key, UNUSED int x, UNUSED int y) {
 	// Refresh the Window
 	glutPostRedisplay();
 }
+
+void getFps() {
+	currentTime = glutGet(GLUT_ELAPSED_TIME);
+	int deltaTime = currentTime - previousTime;
+	frameCount++;
+
+	if (deltaTime > 100) {
+		fps = frameCount / (deltaTime / 1000.0);
+
+		frameCount = 0;
+		previousTime = currentTime;
+	}
+}
+
+void fpsCounter(void) {
+	char fpsStr[16];
+	sprintf(fpsStr, "FPS: %.2f", fps);
+    int strHeight = 18;
+	int strWidth = glutBitmapLength(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)fpsStr);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+
+    glOrtho(0, width, 0, height, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    glRasterPos2i(width - strWidth, height - strHeight);
+
+	for (int i = 0; fpsStr[i] != '\0'; i++) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, fpsStr[i]);
+	}
+
+    glPopMatrix();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+
+    glMatrixMode(GL_MODELVIEW);
+}
+
 
 void toggleFullScreen() {
 	if (isFullScreen) {

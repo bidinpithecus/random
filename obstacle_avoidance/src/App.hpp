@@ -3,6 +3,9 @@
 
 #include "Utils.hpp"
 #include "Camera.hpp"
+#include <iostream>
+#include <sstream>
+#include <iostream>
 
 #define WINDOW_HEIGHT 640
 #define WINDOW_WIDTH 480
@@ -31,12 +34,14 @@ extern Camera camera;
 void drawScene();
 void initScene();
 void finishScene();
-void overlayScene();
+void fpsCounter();
 void normalKeyPressed(unsigned char key, int x, int y);
 void renderScene(void);
 void setupRC();
 void specialKeyPressed(int key, int x, int y);
 void toggleFullScreen();
 void resize(int x, int y);
+void getFps();
+void fpsCounter();
 
 #endif
