@@ -49,25 +49,25 @@ void showPoints() {
 	}
 	glEnd();
 
-	// int i = 0, j = 0;
+	int i = 0, j = 0;
 	for (auto& point : points) {
-		std::vector<Point> wanted;
-		Rectangle range = Rectangle(Point(point.x - (pointSize / 2.0), point.y - (pointSize / 2.0)), Point(point.x + (pointSize / 2.0), point.y + (pointSize / 2.0)));
-		qTree.query(range, wanted);
-		if (wanted.size() > 1) {
-			for (auto otherPoint : wanted) {
-				otherPoint.highlight = true;
-				point.highlight = otherPoint.highlight;
-			}
-		}
-		// for (auto& otherPoint : points) {
-		// 	if (i != j && point.squaredDist(otherPoint) < (pointSize) * (pointSize)) {
-		// 		point.highlight = true;
+		// std::vector<Point> wanted;
+		// Rectangle range = Rectangle(Point(point.x - (pointSize / 2.0), point.y - (pointSize / 2.0)), Point(point.x + (pointSize / 2.0), point.y + (pointSize / 2.0)));
+		// qTree.query(range, wanted);
+		// if (wanted.size() > 1) {
+		// 	for (auto otherPoint : wanted) {
+		// 		otherPoint.highlight = true;
+		// 		point.highlight = otherPoint.highlight;
 		// 	}
-		// 	j++;
 		// }
-		// i++;
-		// j = 0;
+		for (auto& otherPoint : points) {
+			if (i != j && point.squaredDist(otherPoint) < (pointSize) * (pointSize)) {
+				point.highlight = true;
+			}
+			j++;
+		}
+		i++;
+		j = 0;
 	}
 	// drawQuadTree(&qTree);
 }

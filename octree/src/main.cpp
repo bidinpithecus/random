@@ -131,7 +131,7 @@ void display() {
 
     glTranslatef(0, 0, -WINDOW_WIDTH / 2.0);
 
-    // drawTree(&octree);
+    drawTree(&octree);
 	showPoints();
 
     glutSwapBuffers();
@@ -171,7 +171,7 @@ void turnNodesOn() {
 }
 
 int main(int argc, char** argv) {
-    for (int i = 0; i < 2000; i++) {
+    for (int i = 0; i < 50; i++) {
 		Node node = Node();
 		node.setSize(pointSize);
 
