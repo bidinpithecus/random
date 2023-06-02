@@ -18,6 +18,15 @@ float fps = 0.0;
 bool useItemBuffers = false;
 bool useBoundingVolumes = false;
 bool useSpatialPartitioning = false;
+bool menuVisible = false;
+
+// Menu entry IDs
+constexpr int MENU_ITEM_BUFFERS = 0;
+constexpr int MENU_BOUNDING_VOLUMES = 1;
+constexpr int MENU_SPATIAL_PARTITIONING = 2;
+constexpr int MENU_EXIT = 27;
+
+int menu;
 
 // Menu entry labels
 string itemBuffersLabel = "Item Buffers: ";
@@ -28,13 +37,11 @@ void renderUI();
 
 void toggleOption(bool& option, string& label) {
     option = !option;
-    label = label.substr(0, label.find(':') + 2) + (option ? "ON" : "OFF");
 }
 
 void mouse(int button, int state, int x, int y) {
-    if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
-        renderUI();
-    }
+	menuVisible = true;
+	renderUI();
 
     cout << useItemBuffers << endl;
     cout << useBoundingVolumes << endl;
@@ -43,36 +50,36 @@ void mouse(int button, int state, int x, int y) {
 
 void handleMainMenu(int op) {
     switch (op) {
-        case 0:
+        case MENU_ITEM_BUFFERS:
             toggleOption(useItemBuffers, itemBuffersLabel);
             break;
-        case 1:
+        case MENU_BOUNDING_VOLUMES:
             toggleOption(useBoundingVolumes, boundingVolumesLabel);
             break;
-        case 2:
+        case MENU_SPATIAL_PARTITIONING:
             toggleOption(useSpatialPartitioning, spatialPartitioningLabel);
             break;
-        case 27:
+        case MENU_EXIT:
             cout << "See ya later" << endl;
             exit(0);
             break;
     }
 
+	glutDestroyMenu(menu);
+
     glutPostRedisplay();
 }
 
 void renderUI() {
-    int menu;
-
     string itemBuffersText = itemBuffersLabel + (useItemBuffers ? "ON" : "OFF");
     string boundingVolumesText = boundingVolumesLabel + (useBoundingVolumes ? "ON" : "OFF");
     string spatialPartitioningText = spatialPartitioningLabel + (useSpatialPartitioning ? "ON" : "OFF");
 
     menu = glutCreateMenu(handleMainMenu);
-    glutAddMenuEntry(itemBuffersText.c_str(), 0);
-    glutAddMenuEntry(boundingVolumesText.c_str(), 1);
-    glutAddMenuEntry(spatialPartitioningText.c_str(), 2);
-    glutAddMenuEntry("Exit", 27);
+    glutAddMenuEntry(itemBuffersText.c_str(), MENU_ITEM_BUFFERS);
+    glutAddMenuEntry(boundingVolumesText.c_str(), MENU_BOUNDING_VOLUMES);
+    glutAddMenuEntry(spatialPartitioningText.c_str(), MENU_SPATIAL_PARTITIONING);
+    glutAddMenuEntry("Exit", MENU_EXIT);
 
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
@@ -83,7 +90,6 @@ void idle(void) {
 }
 
 void drawScene() {
-    // Your scene rendering code goes here
 }
 
 int main(int argc, char **argv) {
@@ -99,7 +105,6 @@ int main(int argc, char **argv) {
     glutIdleFunc(idle);
     setupRC();
     renderUI(); // Render the initial UI
-
     glutMainLoop();
 
     return 0;

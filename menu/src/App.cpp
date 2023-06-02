@@ -219,7 +219,6 @@ void fpsCounter(void) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-
 void toggleFullScreen() {
 	if (isFullScreen) {
 		glutReshapeWindow(width, height);
